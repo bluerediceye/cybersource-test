@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.stream.Collectors;
 
 /**
@@ -23,6 +24,13 @@ public class NotificationController {
     public String home(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
         log.info("HOME");
         log.info("Request: " + request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
+
+        Enumeration<String> attrs =  request.getAttributeNames();
+        while(attrs.hasMoreElements()) {
+            String e = attrs.nextElement();
+            log.info(e + " : "  + request.getAttribute(e));
+        }
+
         return "Home";
     }
 
@@ -31,6 +39,13 @@ public class NotificationController {
     public String testGet(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
         log.info("Test");
         log.info("Request: " + request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
+
+        Enumeration<String> attrs =  request.getAttributeNames();
+        while(attrs.hasMoreElements()) {
+            String e = attrs.nextElement();
+            log.info(e + " : "  + request.getAttribute(e));
+        }
+
         return "Test";
     }
 
@@ -39,6 +54,13 @@ public class NotificationController {
     public String testCallback(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
         log.info("Callback");
         log.info("Request: " + request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
+
+        Enumeration<String> attrs =  request.getAttributeNames();
+        while(attrs.hasMoreElements()) {
+            String e = attrs.nextElement();
+            log.info(e + " : "  + request.getAttribute(e));
+        }
+
         return "Callback";
     }
 }
