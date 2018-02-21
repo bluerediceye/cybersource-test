@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS $JAVA_OPTS -Dserver.port=$PORT -jar target/notification-0.0.1-SNAPSHOT.jar
+web: java $JAVA_OPTS -Dserver.port=$PORT -jar target/notification-0.0.1-SNAPSHOT.jar
