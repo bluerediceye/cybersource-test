@@ -19,18 +19,21 @@ public class NotificationController {
     @GetMapping
     @RequestMapping("/")
     public String home(final HttpServletRequest request, final HttpServletResponse response){
+        log.info("HOME");
         return "Home";
     }
 
     @GetMapping
     @RequestMapping("/test")
     public String testGet(final HttpServletRequest request, final HttpServletResponse response){
+        log.info("Test");
         return "Test";
     }
 
     @PostMapping
     @RequestMapping("/callback")
     public String testCallback(final HttpServletRequest request, final HttpServletResponse response){
+        log.info("Callback");
         return "Callback";
     }
 }
