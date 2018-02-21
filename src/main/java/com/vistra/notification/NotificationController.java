@@ -23,12 +23,11 @@ public class NotificationController {
     @RequestMapping("/")
     public String home(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
         log.info("HOME");
-        log.info("Request: " + request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
 
-        Enumeration<String> attrs =  request.getAttributeNames();
+        Enumeration<String> attrs =  request.getParameterNames();
         while(attrs.hasMoreElements()) {
             String e = attrs.nextElement();
-            log.info(e + " : "  + request.getAttribute(e));
+            log.info(e + " >>::::::>> "  + request.getAttribute(e));
         }
 
         return "Home";
@@ -38,12 +37,11 @@ public class NotificationController {
     @RequestMapping("/test")
     public String testGet(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
         log.info("Test");
-        log.info("Request: " + request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
 
-        Enumeration<String> attrs =  request.getAttributeNames();
+        Enumeration<String> attrs =  request.getParameterNames();
         while(attrs.hasMoreElements()) {
             String e = attrs.nextElement();
-            log.info(e + " : "  + request.getAttribute(e));
+            log.info(e + " >>::::::>> "  + request.getAttribute(e));
         }
 
         return "Test";
@@ -53,12 +51,11 @@ public class NotificationController {
     @RequestMapping("/callback")
     public String testCallback(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
         log.info("Callback");
-        log.info("Request: " + request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
 
-        Enumeration<String> attrs =  request.getAttributeNames();
+        Enumeration<String> attrs =  request.getParameterNames();
         while(attrs.hasMoreElements()) {
             String e = attrs.nextElement();
-            log.info(e + " : "  + request.getAttribute(e));
+            log.info(e + " >>::::::>> "  + request.getAttribute(e));
         }
 
         return "Callback";
