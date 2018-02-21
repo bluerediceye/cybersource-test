@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 /**
@@ -23,13 +24,7 @@ public class NotificationController {
     @RequestMapping("/")
     public String home(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
         log.info("HOME");
-
-        Enumeration<String> attrs =  request.getParameterNames();
-        while(attrs.hasMoreElements()) {
-            String e = attrs.nextElement();
-            log.info(e + " >>::::::>> "  + request.getParameterValues(e));
-        }
-
+        logRequest(request);
         return "Home";
     }
 
@@ -37,13 +32,7 @@ public class NotificationController {
     @RequestMapping("/test")
     public String testGet(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
         log.info("Test");
-
-        Enumeration<String> attrs =  request.getParameterNames();
-        while(attrs.hasMoreElements()) {
-            String e = attrs.nextElement();
-            log.info(e + " >>::::::>> "  + request.getParameterValues(e));
-        }
-
+        logRequest(request);
         return "Test";
     }
 
@@ -51,13 +40,19 @@ public class NotificationController {
     @RequestMapping("/callback")
     public String testCallback(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
         log.info("Callback");
+        logRequest(request);
+        return "Callback";
+    }
 
+    public void logRequest(final HttpServletRequest request){
         Enumeration<String> attrs =  request.getParameterNames();
+        StringJoiner stringJoiner = new StringJoiner(System.lineSeparator());
         while(attrs.hasMoreElements()) {
             String e = attrs.nextElement();
-            log.info(e + " >>::::::>> "  + request.getParameterValues(e)[0]);
+            stringJoiner.add(e + " : " + request.getParameterValues(e)[0]);
         }
+        log.info("IMPORTANT:\n" + stringJoiner.toString());
 
-        return "Callback";
+
     }
 }
