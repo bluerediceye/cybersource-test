@@ -27,7 +27,7 @@ public class NotificationController {
         Enumeration<String> attrs =  request.getParameterNames();
         while(attrs.hasMoreElements()) {
             String e = attrs.nextElement();
-            log.info(e + " >>::::::>> "  + request.getAttribute(e));
+            log.info(e + " >>::::::>> "  + request.getParameterValues(e));
         }
 
         return "Home";
@@ -41,7 +41,7 @@ public class NotificationController {
         Enumeration<String> attrs =  request.getParameterNames();
         while(attrs.hasMoreElements()) {
             String e = attrs.nextElement();
-            log.info(e + " >>::::::>> "  + request.getAttribute(e));
+            log.info(e + " >>::::::>> "  + request.getParameterValues(e));
         }
 
         return "Test";
