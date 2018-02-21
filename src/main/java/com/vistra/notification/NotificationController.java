@@ -12,8 +12,13 @@ import javax.servlet.http.HttpServletResponse;
  * @author Ming Li
  */
 @RestController
-@RequestMapping("/notification")
 public class NotificationController {
+
+    @GetMapping
+    @RequestMapping("/")
+    public String home(final HttpServletRequest request, final HttpServletResponse response){
+        return "Home";
+    }
 
     @GetMapping
     @RequestMapping("/test")
