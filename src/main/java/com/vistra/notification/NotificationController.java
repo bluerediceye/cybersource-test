@@ -71,7 +71,7 @@ public class NotificationController {
     private Map<String, String> createNotificationData(final HttpServletRequest request) {
         Enumeration<String> attrs = request.getParameterNames();
         Map<String, String> data = new HashMap<>(request.getParameterMap().size());
-        if (attrs.hasMoreElements()) {
+        while (attrs.hasMoreElements()) {
             String e = attrs.nextElement();
             data.put(e, request.getParameter(e));
         }
