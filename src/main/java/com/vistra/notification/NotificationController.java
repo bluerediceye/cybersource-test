@@ -35,7 +35,8 @@ public class NotificationController {
     public void updatePaymentStatus(final HttpServletRequest request) {
         Joiner.MapJoiner mapJoiner = Joiner.on(System.lineSeparator()).withKeyValueSeparator("=");
         Map<String, String> data = createNotificationData(request);
-        log.trace(mapJoiner.join(data));
+
+        log.info(mapJoiner.join(data));
 
         String referenceNumber = data.get("req_reference_number");
         CyberSourcePaymentStatus status = CyberSourcePaymentStatus.valueOf(data.get("decision"));
@@ -46,13 +47,14 @@ public class NotificationController {
     @PostMapping
     @RequestMapping("/update/{referenceNumber}")
     public void updatePaymentStatus(@PathVariable final  String referenceNumber, @RequestBody final CyberSourcePaymentStatus status) {
+        log.info("reference number: " + referenceNumber, "Payment status: " + status.toString());
         paymentStorageService.setCyberSourcePaymentStatus(referenceNumber, status);
     }
 
     @PostMapping
     @RequestMapping("/query/{referenceNumber}")
     public CyberSourcePaymentStatus query(@PathVariable final String referenceNumber) {
-        log.entry(referenceNumber);
+        log.info("reference number: " + referenceNumber);
         return log.traceExit(paymentStorageService.getCyberSourcePaymentStatus(referenceNumber));
     }
 
