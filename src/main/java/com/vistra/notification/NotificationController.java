@@ -72,8 +72,9 @@ public class NotificationController {
         Enumeration<String> attrs = request.getParameterNames();
         Map<String, String> data = new HashMap<>(request.getParameterMap().size());
         while (attrs.hasMoreElements()) {
-            String e = attrs.nextElement();
-            data.put(e, request.getParameter(e));
+            String key = attrs.nextElement();
+            String value = request.getParameter(key) != null ? request.getParameter(key) : "";
+            data.put(key, value);
         }
         return data;
     }
