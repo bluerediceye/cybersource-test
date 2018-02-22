@@ -51,7 +51,7 @@ public class NotificationController {
         paymentStorageService.setCyberSourcePaymentStatus(referenceNumber, status);
     }
 
-    @PostMapping
+    @GetMapping
     @RequestMapping("/query/{referenceNumber}")
     public CyberSourcePaymentStatus query(@PathVariable final String referenceNumber) {
         log.info("reference number: " + referenceNumber);
