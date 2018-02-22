@@ -1,17 +1,15 @@
 package com.vistra.notification;
 
+import com.google.common.base.Joiner;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringJoiner;
-import java.util.stream.Collectors;
 
 /**
  * @author Ming Li
@@ -20,31 +18,45 @@ import java.util.stream.Collectors;
 @Log4j2
 public class NotificationController {
 
+    @Resource
+    private PaymentStorageService paymentStorageService;
+
+
     @GetMapping
     @RequestMapping("/")
-    public String home(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+    public String home(final HttpServletRequest request) {
         log.info("HOME");
         logRequest(request);
         return "Home";
     }
 
-    @GetMapping
-    @RequestMapping("/test")
-    public String testGet(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
-        log.info("Test");
-        logRequest(request);
-        return "Test";
+    @PostMapping
+    @RequestMapping("/callback")
+    public void updatePaymentStatus(final HttpServletRequest request) {
+        Joiner.MapJoiner mapJoiner = Joiner.on(System.lineSeparator()).withKeyValueSeparator("=");
+        Map<String, String> data = createNotificationData(request);
+        log.trace(mapJoiner.join(data));
+
+        String referenceNumber = data.get("req_reference_number");
+        CyberSourcePaymentStatus status = CyberSourcePaymentStatus.valueOf(data.get("decision"));
+
+        paymentStorageService.setCyberSourcePaymentStatus(referenceNumber, status);
     }
 
     @PostMapping
-    @RequestMapping("/callback")
-    public String testCallback(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
-        log.info("Callback");
-        logRequest(request);
-        return "Callback";
+    @RequestMapping("/update/{referenceNumber}")
+    public void updatePaymentStatus(@PathVariable final  String referenceNumber, @RequestBody final CyberSourcePaymentStatus status) {
+        paymentStorageService.setCyberSourcePaymentStatus(referenceNumber, status);
     }
 
-    public void logRequest(final HttpServletRequest request){
+    @PostMapping
+    @RequestMapping("/query/{referenceNumber}")
+    public CyberSourcePaymentStatus query(@PathVariable final String referenceNumber) {
+        log.entry(referenceNumber);
+        return log.traceExit(paymentStorageService.getCyberSourcePaymentStatus(referenceNumber));
+    }
+
+    private void logRequest(final HttpServletRequest request){
         Enumeration<String> attrs =  request.getParameterNames();
         StringJoiner stringJoiner = new StringJoiner(System.lineSeparator());
         while(attrs.hasMoreElements()) {
@@ -52,7 +64,15 @@ public class NotificationController {
             stringJoiner.add(e + " : " + request.getParameterValues(e)[0]);
         }
         log.info("IMPORTANT:\n" + stringJoiner.toString());
+    }
 
-
+    private Map<String, String> createNotificationData(final HttpServletRequest request) {
+        Enumeration<String> attrs = request.getParameterNames();
+        Map<String, String> data = new HashMap<>(request.getParameterMap().size());
+        if (attrs.hasMoreElements()) {
+            String e = attrs.nextElement();
+            data.put(e, request.getParameter(e));
+        }
+        return data;
     }
 }
